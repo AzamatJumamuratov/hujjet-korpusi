@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": [
+    "src",
+    "src/features/uploadFiles/model/useDropZoneLogic.js",
+    "src/features/uploadFiles/model/useUploadFiles.js",
+    "src/features/uploadFiles/ui/DropZone.jsx",
+    "src/features/uploadFiles/ui/FilePreview.jsx",
+    "src/shared/InputContainer"
+  ]
+}
