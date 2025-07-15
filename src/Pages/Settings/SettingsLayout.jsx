@@ -14,7 +14,7 @@ const SettingsLayout = () => {
     <SidebarProvider>
       <SettingsSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 sticky left-0 top-0 bg-white">
+        <header className="flex shrink-0 flex-wrap items-center gap-2 border-b px-4 sticky left-0 top-0 p-3 bg-white">
           <SidebarTrigger className="-ml-1" />
           <Separator
             orientation="vertical"

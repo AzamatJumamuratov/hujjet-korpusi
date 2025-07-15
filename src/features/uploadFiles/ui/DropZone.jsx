@@ -43,23 +43,32 @@ const DropZone = ({ onDrop }) => {
   });
 
   return (
-    <div>
+    <div className="w-full">
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed p-6 rounded-xl text-center cursor-pointer
-          ${
-            isDragActive
-              ? "bg-blue-100 border-blue-400"
-              : "bg-white border-gray-300"
-          }`}
+        className={`border-2 border-dashed p-6 rounded-xl cursor-pointer transition-colors duration-200
+      flex items-center justify-center text-center min-h-[80px] w-full max-w-xl mx-auto
+      ${
+        isDragActive
+          ? "bg-blue-100 border-blue-400"
+          : "bg-white border-gray-300"
+      }`}
       >
         <input {...getInputProps()} />
-        <p>
+
+        {/* Текст отображения */}
+        <p className="relative w-full text-base text-gray-700 font-medium">
           {isDragActive
             ? "Отпустите файлы здесь..."
             : "Перетащите или кликните для выбора файлов"}
+
+          {/* Невидимый "заполнитель", который держит ширину */}
+          <span className="invisible absolute pointer-events-none">
+            Перетащите или кликните для выбора файлов
+          </span>
         </p>
       </div>
+
       {errors.length > 0 && (
         <div className="mt-2 text-sm text-red-500 space-y-1">
           {errors.map((msg, idx) => (

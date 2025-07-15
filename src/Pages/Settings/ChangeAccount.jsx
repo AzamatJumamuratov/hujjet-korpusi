@@ -1,20 +1,47 @@
 import { Button } from "@/components/ui/button";
 import InputContainer from "@/shared/InputContainer/InputContainer";
-import { Form, useActionData, useSubmit } from "react-router";
+import { Form, useActionData, useLoaderData, useSubmit } from "react-router";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { useNotification } from "@/shared/notification/NotificationProvider";
 
 const ChangeAccount = () => {
+  const loaderData = useLoaderData();
+  const profile = loaderData?.profile || {};
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+    reset,
+  } = useForm({
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  // 🔄 Пришли данные профиля — сбрасываем в форму
+  useEffect(() => {
+    if (profile) {
+      reset({
+        first_name: profile.first_name || "",
+        last_name: profile.last_name || "",
+        username: profile.username || "",
+        password: "",
+        confirmPassword: "",
+      });
+    }
+  }, [profile, reset]);
 
   const submit = useSubmit();
   const actionData = useActionData();
   const [isChanging, setIsChanging] = useState(false);
+  const { notify } = useNotification();
 
   const onSubmit = (data) => {
     const formData = new FormData();
@@ -32,19 +59,31 @@ const ChangeAccount = () => {
   };
 
   useEffect(() => {
-    // После ответа от action сбрасываем кнопку
     if (actionData) {
       setIsChanging(false);
+
       if (actionData.success) {
+        notify?.({
+          type: "success",
+          title: "Успешно",
+          description: "Аккаунт был обновлён",
+        });
+      } else if (actionData.error) {
+        notify?.({
+          type: "error",
+          title: "Ошибка",
+          description: actionData.error,
+        });
       }
     }
-  }, [actionData]);
+  }, [actionData, notify]);
 
   const password = watch("password");
 
   return (
     <main className="p-4 overflow-y-auto">
       <h1 className="text-2xl font-semibold mb-4">Изменить Аккаунт</h1>
+
       <Form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="flex flex-col gap-6">
           <InputContainer
@@ -77,9 +116,7 @@ const ChangeAccount = () => {
             type="text"
             placeholder="Введите имя пользователя"
             register={register}
-            validation={{
-              required: "Имя Пользователя обязателен",
-            }}
+            validation={{ required: "Имя пользователя обязателен" }}
             error={errors.username}
             additionalContainerClass="max-[420px]:flex-col"
           />
@@ -93,10 +130,7 @@ const ChangeAccount = () => {
             register={register}
             validation={{
               required: "Пароль обязателен",
-              minLength: {
-                value: 8,
-                message: "Минимум 8 символов",
-              },
+              minLength: { value: 8, message: "Минимум 8 символов" },
             }}
             error={errors.password}
           />
@@ -116,7 +150,7 @@ const ChangeAccount = () => {
           />
         </div>
 
-        <Button disabled={isChanging} type="submit" className={"mt-4"}>
+        <Button disabled={isChanging} type="submit" className="mt-4">
           Отправить
         </Button>
       </Form>

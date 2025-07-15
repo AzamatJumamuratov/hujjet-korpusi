@@ -4,27 +4,30 @@ import FilePreview from "./FilePreview";
 import { useUploadFiles } from "../model/useUploadFiles";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import axios from "@/shared/api/axios";
 import { useNotification } from "@/shared/notification/NotificationProvider";
+import { UploadFiles } from "@/shared/api/files"; // API-метод
+import { useRevalidator } from "react-router";
 
 const UploadFilesBlock = () => {
   const { filesList, onDrop, removeFile, clearFiles } = useUploadFiles();
   const [uploadProgress, setUploadProgress] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const { notify } = useNotification();
+  const validator = useRevalidator();
 
   const handleUpload = async () => {
-    if (filesList.length === 0) return;
+    if (filesList.length === 0 || isUploading) return;
 
     const formData = new FormData();
     filesList.forEach((file) => {
-      formData.append("files", file); // Или formData.append("files[]", file) — зависит от бэкенда
+      formData.append("file_path", file); // Используй "files[]" если бек ожидает массив
     });
 
+    setIsUploading(true);
+    setUploadProgress(0);
+
     try {
-      await axios.post("/files/upload/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      await UploadFiles(formData, {
         onUploadProgress: (event) => {
           const percent = Math.round((event.loaded * 100) / event.total);
           setUploadProgress(percent);
@@ -33,20 +36,22 @@ const UploadFilesBlock = () => {
 
       notify?.({
         type: "success",
-        title: "Файлы загружены",
-        description: `${filesList.length} файлов успешно отправлено`,
+        title: "Успешно",
+        description: `${filesList.length} файлов успешно загружено`,
       });
 
       setUploadProgress(null);
       clearFiles();
+      validator.revalidate();
     } catch (error) {
-      setUploadProgress(0);
       notify?.({
         type: "error",
         title: "Ошибка загрузки",
-        description:
-          error?.response?.data?.detail || "Не удалось загрузить файлы",
+        description: error?.detail || "Не удалось загрузить файлы",
       });
+      setUploadProgress(null);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -76,7 +81,7 @@ const UploadFilesBlock = () => {
             <div className="mt-2">
               <Progress value={uploadProgress} className="h-2" />
               <p className="text-sm text-gray-500 text-center mt-1">
-                Общий прогресс: {uploadProgress}%
+                Загружено: {uploadProgress}%
               </p>
             </div>
           )}
@@ -84,11 +89,11 @@ const UploadFilesBlock = () => {
       )}
 
       <Button
-        disabled={filesList.length === 0 || uploadProgress !== null}
+        disabled={filesList.length === 0 || isUploading}
         onClick={handleUpload}
         className="bg-blue-500 hover:bg-blue-700 z-0"
       >
-        Загрузить
+        {isUploading ? "Загрузка..." : "Загрузить"}
       </Button>
     </div>
   );

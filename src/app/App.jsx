@@ -6,16 +6,21 @@ import registerAction from "@/Pages/auth/model/registerAction";
 import Register from "@/Pages/auth/Register";
 import HomePage from "@/Pages/HomePage/HomePage";
 import ChangeAccount from "@/Pages/Settings/ChangeAccount";
-import { changeAction } from "@/Pages/Settings/model/changeAccountAction";
+import {
+  changeAction,
+  ProfileLoader,
+} from "@/Pages/Settings/model/AccountData";
 import SettingsLayout from "@/Pages/Settings/SettingsLayout";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import { NotificationProvider } from "@/shared/notification/NotificationProvider";
+import { HomeLoader } from "@/Pages/HomePage/model/homeLoader";
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
       Component: HomePage,
+      loader: HomeLoader,
     },
     {
       path: "/settings",
@@ -29,6 +34,7 @@ const App = () => {
           path: "account",
           Component: ChangeAccount,
           action: changeAction,
+          loader: ProfileLoader,
         },
       ],
     },
@@ -61,7 +67,7 @@ const App = () => {
   ]);
   return (
     <NotificationProvider>
-      <RouterProvider router={router}></RouterProvider>;
+      <RouterProvider router={router}></RouterProvider>
     </NotificationProvider>
   );
 };

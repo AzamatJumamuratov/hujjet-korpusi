@@ -6,7 +6,11 @@ const SearchBar = ({ title = "", onType = () => {} }) => {
   return (
     <div className="mb-4">
       {title ? <h3 className="text-lg font-semibold mb-4">{title}</h3> : ""}
-      <Input type={"search"} onChange={OnSearchHandle} />
+      <Input
+        type={"search"}
+        onChange={OnSearchHandle}
+        placeholder="поищите что нибудь..."
+      />
     </div>
   );
 

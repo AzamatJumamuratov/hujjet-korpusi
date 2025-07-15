@@ -6,7 +6,7 @@ export default async function loginAction({ request }) {
     const query = Object.fromEntries(formData.entries());
 
     const data = await fetchLoginInfo(query); // POST-запрос
-    localStorage.setItem("token", data.message);
+    localStorage.setItem("token", data.token);
     return { success: true, data };
   } catch (error) {
     console.error("Ошибка при login POST:", error);

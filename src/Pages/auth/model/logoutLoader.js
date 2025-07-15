@@ -6,15 +6,16 @@ export default async function logoutLoader() {
     const data = await fetchLogoutInfo(); // POST-запрос
 
     localStorage.removeItem("token");
-    return redirect("/auth/login");
   } catch (error) {
     console.error("Ошибка при logout POST:", error);
 
-    const message =
-      error.response?.data?.error ||
-      error.response?.data?.detail ||
-      error.message;
+    // const message =
+    //   error.response?.data?.error ||
+    //   error.response?.data?.detail ||
+    //   error.message;
 
-    return { error: message };
+    // return { error: message };
   }
+
+  return redirect("/auth/login");
 }

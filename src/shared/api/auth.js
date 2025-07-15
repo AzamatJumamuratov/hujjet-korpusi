@@ -18,6 +18,11 @@ export const fetchRegisterInfo = async (data) => {
   return response.data;
 };
 
+export const fetchProfileInfo = async () => {
+  const response = await axios.get("/auth/profile/");
+  return response.data;
+};
+
 export const fetchLogoutInfo = async () => {
   const response = await axios.post("/auth/logout/");
   return response.data;

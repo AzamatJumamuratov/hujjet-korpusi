@@ -3,6 +3,7 @@ import { UploadFiles } from "@/shared/api/home";
 export default async function homeAction({ request }) {
   try {
     const formData = await request.formData();
+    console.log(Array.from(formData));
 
     // Отправка формы на сервер
     const result = await UploadFiles(formData);

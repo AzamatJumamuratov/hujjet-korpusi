@@ -6,6 +6,8 @@ export default async function registerAction({ request }) {
     const payload = Object.fromEntries(formData.entries());
 
     const data = await fetchRegisterInfo(payload);
+
+    localStorage.setItem("token", data.token);
     return { success: true, data };
   } catch (error) {
     console.error("Ошибка при регистрации:", error);

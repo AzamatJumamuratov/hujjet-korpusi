@@ -1,4 +1,5 @@
 import { fetchChangeAccount } from "@/Pages/Settings/model/settings";
+import { fetchProfileInfo } from "@/shared/api/auth";
 
 export async function changeAction({ request }) {
   try {
@@ -14,5 +15,18 @@ export async function changeAction({ request }) {
       error.message;
 
     return { error: message };
+  }
+}
+
+export async function ProfileLoader() {
+  try {
+    const profile = await fetchProfileInfo();
+    return { success: true, profile };
+  } catch (profileError) {
+    console.error("Ошибка при получении профиля:", profileError);
+    return {
+      error:
+        profileError?.response?.data?.detail || "Не удалось загрузить профиль",
+    };
   }
 }

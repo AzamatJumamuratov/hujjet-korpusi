@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import user_icon from "@/assets/user_icon.svg";
 import settings_icon from "@/assets/settings_icon.svg";
 import logout_icon from "@/assets/logout_icon.svg";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Header = () => {
+  const loaderData = useLoaderData();
   return (
     <header className="flex justify-evenly p-3 z-10 sticky left-0 top-0 bg-white shadow-md">
       <h1 className="text-xl font-semibold">Hújjet-Korpusı</h1>
@@ -23,7 +24,7 @@ const Header = () => {
         <DropdownMenuContent>
           <DropdownMenuLabel>Аккаунт</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuLabel>azamat_jumamuratov</DropdownMenuLabel>
+          <DropdownMenuLabel>{loaderData.profile.username}</DropdownMenuLabel>
           <Link to={"/settings"} className="">
             <DropdownMenuItem className={"flex items-center"}>
               <img src={settings_icon} className="size-4" />

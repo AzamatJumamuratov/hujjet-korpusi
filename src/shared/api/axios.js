@@ -1,21 +1,30 @@
 import { default as axiosImported } from "axios";
-import { redirect } from "react-router";
 
 const axios = axiosImported.create({
-  baseURL: "http://10.95.4.174:8000/api",
+  baseURL: "http://10.95.4.170:8001/api",
 });
 
-// Автоматически добавлять токен
+// ✅ Добавляем токен в каждый запрос
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (!token) {
-    redirect("/auth/login");
-  }
 
   if (token) {
     config.headers.Authorization = `Token ${token}`;
   }
+
   return config;
 });
+
+// ✅ Перехватываем ответы и обрабатываем 401
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token"); // очищаем токен
+      window.location.href = "/auth/login"; // редиректим на страницу входа
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default axios;
