@@ -6,14 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useNotification } from "@/shared/notification/NotificationProvider";
 import { UploadFiles } from "@/shared/api/files"; // API-метод
-import { useRevalidator } from "react-router";
 
-const UploadFilesBlock = () => {
+const UploadFilesBlock = ({ onFileUploaded }) => {
   const { filesList, onDrop, removeFile, clearFiles } = useUploadFiles();
   const [uploadProgress, setUploadProgress] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const { notify } = useNotification();
-  const validator = useRevalidator();
 
   const handleUpload = async () => {
     if (filesList.length === 0 || isUploading) return;
@@ -42,7 +40,7 @@ const UploadFilesBlock = () => {
 
       setUploadProgress(null);
       clearFiles();
-      validator.revalidate();
+      onFileUploaded();
     } catch (error) {
       notify?.({
         type: "error",

@@ -1,7 +1,7 @@
 import { default as axiosImported } from "axios";
 
 const axios = axiosImported.create({
-  baseURL: "http://10.95.4.170:8001/api",
+  baseURL: "https://api.saxovatuztatu.uz/api",
 });
 
 // ✅ Добавляем токен в каждый запрос
