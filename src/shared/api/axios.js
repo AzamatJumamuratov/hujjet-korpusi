@@ -1,7 +1,7 @@
 import { default as axiosImported } from "axios";
 
 const axios = axiosImported.create({
-  baseURL: "https://api.saxovatuztatu.uz/api",
+  baseURL: "http://hujjat.saxovatuztatu.uz:8001",
 });
 
 // ✅ Добавляем токен в каждый запрос

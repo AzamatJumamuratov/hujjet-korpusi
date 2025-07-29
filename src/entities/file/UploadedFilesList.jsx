@@ -11,6 +11,7 @@ const UploadedFilesList = ({
   onSearch,
   onPageChange,
   onRefresh,
+  disablePagination = false,
 }) => {
   const totalPages = Math.ceil(count / pageSize);
 
@@ -26,11 +27,9 @@ const UploadedFilesList = ({
       <SearchBar title="Поиск по имени файла" onType={onSearch} />
 
       {loading ? (
-        <p className="text-gray-500 text-center mt-6">Поиск файлов...</p>
+        <p className="text-gray-500 text-center mt-6">Загрузка файлов...</p>
       ) : files.length === 0 ? (
-        <p className="text-gray-500 text-center mt-6">
-          Нет файлов или ничего не найдено
-        </p>
+        <p className="text-gray-500 text-center mt-6">Ничего не найдено</p>
       ) : (
         <div className="flex flex-col gap-8 mt-4">
           {verifiedFiles.length > 0 && (
@@ -70,7 +69,7 @@ const UploadedFilesList = ({
         </div>
       )}
 
-      {totalPages > 1 && (
+      {!disablePagination && totalPages > 1 && (
         <div className="mt-8 flex justify-center">
           <Pagination
             currentPage={currentPage}

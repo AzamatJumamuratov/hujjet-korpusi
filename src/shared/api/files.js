@@ -69,3 +69,10 @@ export const updateFileDescription = async (fileId, description) => {
     throw new Error("Произошла ошибка при обновлении описания файла.");
   }
 };
+
+export const searchFiles = async (file_name) => {
+  const res = await axios.get("/files/search/", {
+    params: { args: file_name },
+  });
+  return res.data; // должен возвращать массив файлов
+};
