@@ -1,7 +1,7 @@
 import { default as axiosImported } from "axios";
 
 const axios = axiosImported.create({
-  baseURL: "http://hujjat.saxovatuztatu.uz:8001",
+  baseURL: "https://akkanat.pythonanywhere.com/",
 });
 
 // ✅ Добавляем токен в каждый запрос
@@ -10,7 +10,6 @@ axios.interceptors.request.use((config) => {
 
   if (token) {
     config.headers.Authorization = `Token ${token}`;
-    E
   }
 
   return config;
